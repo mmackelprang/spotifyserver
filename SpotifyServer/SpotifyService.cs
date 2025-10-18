@@ -283,6 +283,11 @@ public class SpotifyService
         List<string> seedTrackIds, 
         int limit = 20)
     {
+        if (seedTrackIds == null || seedTrackIds.Count == 0)
+        {
+            throw new ArgumentException("At least one seed track ID is required", nameof(seedTrackIds));
+        }
+        
         var request = new RecommendationsRequest
         {
             Limit = limit
@@ -303,6 +308,11 @@ public class SpotifyService
         List<string> seedArtistIds, 
         int limit = 20)
     {
+        if (seedArtistIds == null || seedArtistIds.Count == 0)
+        {
+            throw new ArgumentException("At least one seed artist ID is required", nameof(seedArtistIds));
+        }
+        
         var request = new RecommendationsRequest
         {
             Limit = limit
