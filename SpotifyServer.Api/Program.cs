@@ -24,14 +24,20 @@ builder.Services.AddSwaggerGen(c =>
 // Register SpotifyService as a singleton
 builder.Services.AddSingleton<SpotifyService>(sp =>
 {
-    var clientId = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID");
-    var clientSecret = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET");
-    var refreshToken = Environment.GetEnvironmentVariable("SPOTIFY_REFRESH_TOKEN");
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    
+    // Try environment variables first, then fall back to configuration
+    var clientId = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID") 
+        ?? configuration["Spotify:ClientId"];
+    var clientSecret = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET") 
+        ?? configuration["Spotify:ClientSecret"];
+    var refreshToken = Environment.GetEnvironmentVariable("SPOTIFY_REFRESH_TOKEN") 
+        ?? configuration["Spotify:RefreshToken"];
 
     if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
     {
         throw new InvalidOperationException(
-            "SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET environment variables must be set");
+            "SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set in environment variables or appsettings.json");
     }
 
     SpotifyClient spotify;
@@ -532,9 +538,12 @@ app.MapPost("/api/playback/radio/track/{trackId}", async (SpotifyService service
 
 Console.WriteLine("Starting Spotify Server API...");
 Console.WriteLine("Swagger UI available at: http://localhost:5001");
-Console.WriteLine("\nRequired environment variables:");
-Console.WriteLine("  - SPOTIFY_CLIENT_ID");
-Console.WriteLine("  - SPOTIFY_CLIENT_SECRET");
-Console.WriteLine("  - SPOTIFY_REFRESH_TOKEN (optional, for user-authenticated features)");
+Console.WriteLine("\nConfiguration sources (in priority order):");
+Console.WriteLine("  1. Environment variables");
+Console.WriteLine("  2. appsettings.json");
+Console.WriteLine("\nRequired settings:");
+Console.WriteLine("  - SPOTIFY_CLIENT_ID or Spotify:ClientId");
+Console.WriteLine("  - SPOTIFY_CLIENT_SECRET or Spotify:ClientSecret");
+Console.WriteLine("  - SPOTIFY_REFRESH_TOKEN or Spotify:RefreshToken (optional, for user-authenticated features)");
 
 app.Run("http://localhost:5001");

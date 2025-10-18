@@ -14,7 +14,9 @@ A RESTful API for controlling Spotify playback and managing playlists, built wit
 
 ### 1. Set Environment Variables
 
-The API requires Spotify credentials:
+The API requires Spotify credentials. You can provide them via environment variables or appsettings.json.
+
+#### Option A: Environment Variables (Recommended)
 
 **Linux/macOS:**
 ```bash
@@ -29,6 +31,22 @@ $env:SPOTIFY_CLIENT_ID="your_client_id_here"
 $env:SPOTIFY_CLIENT_SECRET="your_client_secret_here"
 $env:SPOTIFY_REFRESH_TOKEN="your_refresh_token_here"  # Optional
 ```
+
+#### Option B: appsettings.json
+
+Edit `SpotifyServer.Api/appsettings.json`:
+
+```json
+{
+  "Spotify": {
+    "ClientId": "your_client_id_here",
+    "ClientSecret": "your_client_secret_here",
+    "RefreshToken": "your_refresh_token_here"
+  }
+}
+```
+
+**Note:** Environment variables take precedence over appsettings.json.
 
 **Note:** To get a refresh token, run the original SpotifyServer sample app with option 2 (Authorization Code). It will display your refresh token after authentication.
 
