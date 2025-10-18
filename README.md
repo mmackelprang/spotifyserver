@@ -4,6 +4,11 @@ A modern C# service for integrating Spotify functionality into applications, bui
 
 ## Features
 
+✓ **REST API** ⭐ NEW
+- Full-featured REST API with OpenAPI/Swagger documentation
+- Control Spotify playback via HTTP endpoints
+- Interactive API documentation at root endpoint
+
 ✓ **Search Functionality**
 - Search for tracks by name, album, or artist
 - Flexible search queries with support for filters
@@ -17,6 +22,7 @@ A modern C# service for integrating Spotify functionality into applications, bui
 - Pause and resume playback
 - Skip to next/previous tracks
 - Control repeat modes (single track, context/playlist, or off)
+- **Shuffle control** (enable/disable shuffle mode) ⭐ NEW
 
 ✓ **Radio/Recommendations**
 - Generate "radio stations" based on seed tracks or artists
@@ -35,6 +41,23 @@ A modern C# service for integrating Spotify functionality into applications, bui
 3. **Spotify Application** - Register your application to get Client ID and Client Secret
 
 ## Setup
+
+### Option 1: Use the REST API (Recommended for most use cases)
+
+The easiest way to use Spotify Server is through the REST API:
+
+1. **Set environment variables** (see below)
+2. **Run the API server:**
+   ```bash
+   cd SpotifyServer.Api
+   dotnet run
+   ```
+3. **Access Swagger UI** at http://localhost:5001
+4. **See [API_DOCUMENTATION.md](API_DOCUMENTATION.md) for complete API guide**
+
+### Option 2: Use as a Library
+
+For programmatic access, use SpotifyServer as a library in your C# applications.
 
 ### 1. Create Spotify Application
 
@@ -152,6 +175,9 @@ if (currentlyPlaying?.Item is FullTrack track)
 - `EnableTrackRepeatAsync(deviceId?)` - Enable single track repeat
 - `EnableContextRepeatAsync(deviceId?)` - Enable playlist/album repeat
 - `DisableRepeatAsync(deviceId?)` - Disable repeat
+- `EnableShuffleAsync(deviceId?)` - Enable shuffle mode ⭐ NEW
+- `DisableShuffleAsync(deviceId?)` - Disable shuffle mode ⭐ NEW
+- `SetShuffleAsync(state, deviceId?)` - Set shuffle mode on/off ⭐ NEW
 
 ### Currently Playing
 - `GetCurrentlyPlayingAsync()` - Get currently playing track

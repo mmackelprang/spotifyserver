@@ -227,6 +227,50 @@ public class SpotifyService
         await SetRepeatModeAsync(PlayerSetRepeatRequest.State.Off, deviceId);
     }
 
+    /// <summary>
+    /// Enable shuffle mode
+    /// </summary>
+    public async Task EnableShuffleAsync(string? deviceId = null)
+    {
+        var request = new PlayerShuffleRequest(true);
+        if (deviceId != null)
+        {
+            request.DeviceId = deviceId;
+        }
+        
+        await _spotify.Player.SetShuffle(request);
+    }
+
+    /// <summary>
+    /// Disable shuffle mode
+    /// </summary>
+    public async Task DisableShuffleAsync(string? deviceId = null)
+    {
+        var request = new PlayerShuffleRequest(false);
+        if (deviceId != null)
+        {
+            request.DeviceId = deviceId;
+        }
+        
+        await _spotify.Player.SetShuffle(request);
+    }
+
+    /// <summary>
+    /// Set shuffle mode
+    /// </summary>
+    /// <param name="state">true to enable shuffle, false to disable</param>
+    public async Task SetShuffleAsync(bool state, string? deviceId = null)
+    {
+        if (state)
+        {
+            await EnableShuffleAsync(deviceId);
+        }
+        else
+        {
+            await DisableShuffleAsync(deviceId);
+        }
+    }
+
     #endregion
 
     #region Currently Playing
