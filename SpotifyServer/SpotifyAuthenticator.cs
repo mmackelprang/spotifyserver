@@ -24,10 +24,12 @@ public class SpotifyAuthenticator
     {
         var tcs = new TaskCompletionSource<SpotifyClient>();
         
-        // Parse the port from the redirect URI
-        var uri = new Uri(_config.RedirectUri);
+        // Parse the redirect URI and extract the base URI for the server
+        // EmbedIOAuthServer automatically appends /callback, so we need to provide just the base URI
+        var redirectUri = new Uri(_config.RedirectUri);
+        var baseUri = new UriBuilder(redirectUri.Scheme, redirectUri.Host, redirectUri.Port).Uri;
         
-        _server = new EmbedIOAuthServer(uri, uri.Port);
+        _server = new EmbedIOAuthServer(baseUri, baseUri.Port);
         await _server.Start();
 
         _server.AuthorizationCodeReceived += async (sender, response) =>
